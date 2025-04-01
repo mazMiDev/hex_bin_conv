@@ -14,7 +14,11 @@ typedef enum
 
 void printMenu()
 {
-    printf("");
+    printf("HEX <-> BIN converter\n");
+    printf("convertet. [OPTION] [FILE]\n");
+    printf(" -h - get help on using the utility\n");
+    printf(" --HexToBin -  convert HEX file to BIN file. After the parameter comes the /path/to/the/file/with/the/*.hex\n");
+    printf(" --BinToHex -  convert HEX file to BIN file. After the parameter comes the /path/to/the/file/with/the/*.hex\n");
 }
 
 uint32_t convHexTobin(const char *inFile)
@@ -68,20 +72,21 @@ int main(int argc, char *argv[])
 {
     if (argc < 2 || argc > 3)
     {
-        printf("ERROR");
+        printf("Error: Invalid number of parameters\nTo get help use -h or --help");
         exit(EXIT_FAILURE);
     }
 
     if (strcmp(argv[1], "--help") || strcmp(argv[1], "-h"))
         printMenu();
     else if (strcmp(argv[1], "--HexToBin"))
-        convHexTobin(argv[2]);
-    else if (strcmp(argv[1], "--BinToHex"))
-        convBinToHex(argv[2]);
-    else
-    {
-        printf("Error: Invalid parameter\nTo get help use -h or --help");
-        exit(EXIT_FAILURE);
-    }
+        if (strstr())
+            convHexTobin(argv[2]);
+        else if (strcmp(argv[1], "--BinToHex"))
+            convBinToHex(argv[2]);
+        else
+        {
+            printf("Error: Invalid parameter\nTo get help use -h or --help");
+            exit(EXIT_FAILURE);
+        }
     return 0;
 }
