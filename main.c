@@ -6,7 +6,8 @@
 #include <stdlib.h>
 #include <string.h>
 
-void printMenu()
+// справка по использованию конвертора
+void printHelp()
 {
     printf("HEX <-> BIN converter\n");
     printf("<util_name> [OPTION] [FILE]\n");
@@ -15,6 +16,7 @@ void printMenu()
     printf(" --BinToHex\t-  convert BIN file to HEX file. After the parameter comes the /path/to/the/file/with/the/*.bin\n");
 }
 
+// Конвертирование hex-файла в бинарный файл
 void convHexTobin(const char *inFile)
 {
 
@@ -25,6 +27,7 @@ void convHexTobin(const char *inFile)
         exit(EXIT_FAILURE);
     }
 
+    // Создание выходного файла
     char outFile[FILENAME_MAX] = {0};
     strcat(outFile, inFile);
     strcat(outFile, ".bin");
@@ -40,11 +43,13 @@ void convHexTobin(const char *inFile)
     hex[0] = fgetc(input);
     while (hex[0] != EOF)
     {
+        // проверки считываемых символов, чтобы они с формату 0x**
         if ((hex[0] > '0' && hex[0] < '9') || (hex[0] > 'a' && hex[0] < 'f') || (hex[0] > 'A' && hex[0] < 'F'))
         {
             hex[1] = fgetc(input);
             if ((hex[1] > '0' && hex[1] < '9') || (hex[1] > 'a' && hex[1] < 'f') || (hex[1] > 'A' && hex[0] < 'F'))
             {
+                // конвертирование 16-ричного кода в символ
                 unsigned char byte = (unsigned char)strtol(hex, NULL, 16);
                 fwrite(&byte, sizeof(byte), 1, output);
             }
@@ -56,6 +61,7 @@ void convHexTobin(const char *inFile)
     fclose(output);
 }
 
+// Конвертирование бинарного файл в hex-файл
 void convBinToHex(const char *inFile)
 {
     FILE *input = fopen(inFile, "rb");
@@ -65,6 +71,7 @@ void convBinToHex(const char *inFile)
         exit(EXIT_FAILURE);
     }
 
+    // Создание выходного файла
     char outFile[FILENAME_MAX] = {0};
     strcat(outFile, inFile);
     strcat(outFile, ".hex");
@@ -78,6 +85,7 @@ void convBinToHex(const char *inFile)
     int byte = fgetc(input);
     while (byte != EOF)
     {
+        // конвертирование символа  в 16-ричный код
         fprintf(output, "%02X", byte);
         byte = fgetc(input);
     }
@@ -95,7 +103,7 @@ void main(int argc, char *argv[])
     }
 
     if (!strcmp(argv[1], "--help") || !strcmp(argv[1], "-h"))
-        printMenu();
+        printHelp();
     else if (!strcmp(argv[1], "--HexToBin") && (strstr(argv[2], ".hex") - argv[2] == strlen(argv[2]) - 4))
     {
         convHexTobin(argv[2]);
